@@ -1,0 +1,46 @@
+name: SwiftLint
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: swiftlint-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    container: swift:6.2
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Restore swiftlint cache
+        id: cache-swiftlint
+        uses: actions/cache/restore@v4
+        with:
+          path: /usr/local/bin/swiftlint
+          key: ${{ runner.os }}-swiftlint-0.62.2
+
+      - name: Install swiftlint
+        if: steps.cache-swiftlint.outputs.cache-hit != 'true'
+        run: |
+          apt-get update && apt-get install -y curl
+          curl -L https://github.com/realm/SwiftLint/releases/download/0.62.2/swiftlint_linux.zip -o swiftlint.zip
+          unzip swiftlint.zip
+          chmod +x swiftlint
+          mv swiftlint /usr/local/bin/
+
+      - name: Lint
+        run: swiftlint lint --strict --reporter github-actions-logging
+
+      - name: Save swiftlint cache
+        if: steps.cache-swiftlint.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: /usr/local/bin/swiftlint
+          key: ${{ runner.os }}-swiftlint-0.62.2

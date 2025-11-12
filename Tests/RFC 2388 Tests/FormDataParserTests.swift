@@ -6,6 +6,7 @@
 //
 
 import Testing
+
 @testable import RFC_2388
 
 @Suite("FormData Parser Tests")
@@ -29,7 +30,8 @@ struct FormDataParserTests {
         let result = FormData.parse("tags[]=swift&tags[]=vapor", strategy: .brackets)
 
         guard case .dictionary(let dict) = result,
-              case .array(let tags) = dict["tags"] else {
+            case .array(let tags) = dict["tags"]
+        else {
             Issue.record("Expected dictionary with array")
             return
         }
@@ -41,10 +43,14 @@ struct FormDataParserTests {
 
     @Test("Parse arrays with indices")
     func testBracketsWithIndicesStrategy() {
-        let result = FormData.parse("items[0]=first&items[1]=second", strategy: .bracketsWithIndices)
+        let result = FormData.parse(
+            "items[0]=first&items[1]=second",
+            strategy: .bracketsWithIndices
+        )
 
         guard case .dictionary(let dict) = result,
-              case .array(let items) = dict["items"] else {
+            case .array(let items) = dict["items"]
+        else {
             Issue.record("Expected dictionary with array")
             return
         }
@@ -59,7 +65,8 @@ struct FormDataParserTests {
         let result = FormData.parse("color=red&color=blue", strategy: .accumulateValues)
 
         guard case .dictionary(let dict) = result,
-              case .array(let colors) = dict["color"] else {
+            case .array(let colors) = dict["color"]
+        else {
             Issue.record("Expected dictionary with array")
             return
         }
@@ -74,7 +81,8 @@ struct FormDataParserTests {
         let result = FormData.parse("user[name]=John&user[email]=john@example.com")
 
         guard case .dictionary(let dict) = result,
-              case .dictionary(let user) = dict["user"] else {
+            case .dictionary(let user) = dict["user"]
+        else {
             Issue.record("Expected nested dictionary")
             return
         }

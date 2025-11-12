@@ -77,7 +77,8 @@ extension FormData {
             return prefix.isEmpty ? str : "\(prefix)=\(str)"
 
         case .dictionary(let dict):
-            return dict
+            return
+                dict
                 .sorted(by: { $0.key < $1.key })
                 .map { key, value in
                     let newPrefix = prefix.isEmpty ? key : "\(prefix)[\(key)]"
@@ -89,7 +90,8 @@ extension FormData {
             switch strategy {
             case .accumulateValues:
                 // Repeat the key for each value
-                return array
+                return
+                    array
                     .map { value in
                         value.encodeWithStrategy(prefix: prefix, strategy: strategy)
                     }
@@ -97,7 +99,8 @@ extension FormData {
 
             case .brackets:
                 // Use empty bracket notation
-                return array
+                return
+                    array
                     .map { value in
                         let newPrefix = "\(prefix)[]"
                         return value.encodeWithStrategy(prefix: newPrefix, strategy: strategy)
@@ -106,7 +109,8 @@ extension FormData {
 
             case .bracketsWithIndices:
                 // Use indexed notation
-                return array
+                return
+                    array
                     .enumerated()
                     .map { idx, value in
                         let newPrefix = "\(prefix)[\(idx)]"

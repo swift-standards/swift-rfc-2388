@@ -123,10 +123,12 @@ extension FormData {
         from query: String,
         sort: Bool = false
     ) -> [(String, String?)] {
-        let pairs = query
+        let pairs =
+            query
             .split(separator: "&")
             .map { (pairString: Substring) -> (name: String, value: String?) in
-                let pairArray = pairString
+                let pairArray =
+                    pairString
                     .split(separator: "=", maxSplits: 1, omittingEmptySubsequences: false)
                     .compactMap { substring in
                         WHATWG_URL_Encoding.percentDecode(String(substring), plusAsSpace: true)
@@ -205,7 +207,12 @@ extension FormData {
                     if path.count > 2 {
                         // Create nested structure
                         var newElement = FormData.dictionary([:])
-                        insert(value: value, at: Array(path[2...]), into: &newElement, isArray: isArray)
+                        insert(
+                            value: value,
+                            at: Array(path[2...]),
+                            into: &newElement,
+                            isArray: isArray
+                        )
                         values.append(newElement)
                     } else {
                         values.append(.value(value))
@@ -224,7 +231,12 @@ extension FormData {
 
                     // Recurse into the specific index
                     if path.count > 2 {
-                        insert(value: value, at: Array(path[2...]), into: &values[index], isArray: isArray)
+                        insert(
+                            value: value,
+                            at: Array(path[2...]),
+                            into: &values[index],
+                            isArray: isArray
+                        )
                     } else {
                         values[index] = .value(value)
                     }

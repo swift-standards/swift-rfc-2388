@@ -6,6 +6,7 @@
 //
 
 import Testing
+
 @testable import RFC_2388
 
 @Suite("FormData Encoder Tests")
@@ -15,7 +16,7 @@ struct FormDataEncoderTests {
     func testEncodeSimpleValues() {
         let data = FormData.dictionary([
             "name": .value("John"),
-            "age": .value("30")
+            "age": .value("30"),
         ])
 
         let encoded = data.encode(percentEncode: false)
@@ -63,7 +64,7 @@ struct FormDataEncoderTests {
         let data = FormData.dictionary([
             "user": .dictionary([
                 "name": .value("John"),
-                "email": .value("john@example.com")
+                "email": .value("john@example.com"),
             ])
         ])
 

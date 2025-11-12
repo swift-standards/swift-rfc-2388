@@ -1,0 +1,55 @@
+name: Swift Format
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: format-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  swift_format:
+    runs-on: ubuntu-latest
+    container: swift:6.2
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure git safe directory
+        run: git config --global --add safe.directory /__w/swift-rfc-2388/swift-rfc-2388
+
+      - name: Restore swift-format cache
+        id: cache-swift-format
+        uses: actions/cache/restore@v4
+        with:
+          path: .build/release/swift-format
+          key: ${{ runner.os }}-swift-format-510
+
+      - name: Build swift-format
+        if: steps.cache-swift-format.outputs.cache-hit != 'true'
+        run: |
+          git clone https://github.com/swiftlang/swift-format.git /tmp/swift-format
+          cd /tmp/swift-format
+          git checkout 510.1.0
+          swift build -c release
+          cp .build/release/swift-format $GITHUB_WORKSPACE/.build/release/swift-format
+
+      - name: Format code
+        run: .build/release/swift-format format --recursive --in-place --ignore-unparsable-files Sources Tests
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_message: "Run swift-format"
+
+      - name: Save swift-format cache
+        if: steps.cache-swift-format.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: .build/release/swift-format
+          key: ${{ runner.os }}-swift-format-510
