@@ -11,45 +11,35 @@ concurrency:
 
 jobs:
   swift_format:
+    name: swift-format
     runs-on: ubuntu-latest
-    container: swift:6.2
+    container: swift:6.0
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v5
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Configure git safe directory
-        run: git config --global --add safe.directory /__w/swift-rfc-2388/swift-rfc-2388
-
-      - name: Restore swift-format cache
+      - name: Cache swift-format
         id: cache-swift-format
-        uses: actions/cache/restore@v4
+        uses: actions/cache@v4
         with:
-          path: .build/release/swift-format
-          key: ${{ runner.os }}-swift-format-510
+          path: /usr/local/bin/swift-format
+          key: ${{ runner.os }}-swift-format-${{ hashFiles('.github/workflows/swift-format.yml') }}
 
-      - name: Build swift-format
+      - name: Install swift-format
         if: steps.cache-swift-format.outputs.cache-hit != 'true'
         run: |
-          git clone https://github.com/swiftlang/swift-format.git /tmp/swift-format
-          cd /tmp/swift-format
-          git checkout 510.1.0
+          git clone --depth 1 --branch main https://github.com/apple/swift-format.git
+          cd swift-format
           swift build -c release
-          cp .build/release/swift-format $GITHUB_WORKSPACE/.build/release/swift-format
+          cp .build/release/swift-format /usr/local/bin/
+          cd ..
+          rm -rf swift-format
 
-      - name: Format code
-        run: .build/release/swift-format format --recursive --in-place --ignore-unparsable-files Sources Tests
+      - name: Format
+        run: swift-format format --ignore-unparsable-files --recursive --in-place Sources Tests
 
-      - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v7
+      - uses: stefanzweifel/git-auto-commit-action@v7
         with:
-          commit_message: "Run swift-format"
-
-      - name: Save swift-format cache
-        if: steps.cache-swift-format.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
-        with:
-          path: .build/release/swift-format
-          key: ${{ runner.os }}-swift-format-510
+          commit_message: Run swift-format
+          branch: 'main'
