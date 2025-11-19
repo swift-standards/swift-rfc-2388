@@ -5,7 +5,6 @@
 //  RFC 2388: Returning Values from Forms: multipart/form-data
 //
 
-import Foundation
 
 /// A container representing parsed form data according to RFC 2388.
 ///

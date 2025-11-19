@@ -5,7 +5,6 @@
 //  RFC 2388: Returning Values from Forms: multipart/form-data
 //
 
-import Foundation
 
 extension FormData {
     /// Strategies for parsing array notation in form data keys.

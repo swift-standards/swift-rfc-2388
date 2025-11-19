@@ -5,7 +5,6 @@
 //  RFC 2388: Returning Values from Forms: multipart/form-data
 //
 
-import Foundation
 import WHATWG_URL_Encoding
 
 extension FormData {
