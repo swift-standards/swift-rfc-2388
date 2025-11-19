@@ -9,11 +9,11 @@ import Testing
 
 @testable import RFC_2388
 
-@Suite("FormData Encoder Tests")
-struct FormDataEncoderTests {
+@Suite
+struct `FormData Encoder Tests` {
 
-    @Test("Encode simple values")
-    func testEncodeSimpleValues() {
+    @Test
+    func `Encode simple values`() {
         let data = FormData.dictionary([
             "name": .value("John"),
             "age": .value("30"),
@@ -26,8 +26,8 @@ struct FormDataEncoderTests {
         #expect(encoded.contains("name=John"))
     }
 
-    @Test("Encode arrays with brackets strategy")
-    func testEncodeBracketsStrategy() {
+    @Test
+    func `Encode arrays with brackets strategy`() {
         let data = FormData.dictionary([
             "tags": .array([.value("swift"), .value("vapor")])
         ])
@@ -37,8 +37,8 @@ struct FormDataEncoderTests {
         #expect(encoded == "tags[]=swift&tags[]=vapor")
     }
 
-    @Test("Encode arrays with indices")
-    func testEncodeBracketsWithIndicesStrategy() {
+    @Test
+    func `Encode arrays with indices`() {
         let data = FormData.dictionary([
             "items": .array([.value("first"), .value("second")])
         ])
@@ -48,8 +48,8 @@ struct FormDataEncoderTests {
         #expect(encoded == "items[0]=first&items[1]=second")
     }
 
-    @Test("Encode with accumulate values strategy")
-    func testEncodeAccumulateValuesStrategy() {
+    @Test
+    func `Encode with accumulate values strategy`() {
         let data = FormData.dictionary([
             "color": .array([.value("red"), .value("blue")])
         ])
@@ -59,8 +59,8 @@ struct FormDataEncoderTests {
         #expect(encoded == "color=red&color=blue")
     }
 
-    @Test("Encode nested objects")
-    func testEncodeNestedObjects() {
+    @Test
+    func `Encode nested objects`() {
         let data = FormData.dictionary([
             "user": .dictionary([
                 "name": .value("John"),
@@ -74,8 +74,8 @@ struct FormDataEncoderTests {
         #expect(encoded == "user[email]=john@example.com&user[name]=John")
     }
 
-    @Test("Round-trip parsing and encoding")
-    func testRoundTrip() {
+    @Test
+    func `Round-trip parsing and encoding`() {
         let original = "name=John&tags[]=swift&tags[]=vapor"
         let parsed = FormData.parse(original, strategy: .brackets)
         let encoded = parsed.encode(strategy: .brackets, percentEncode: false)

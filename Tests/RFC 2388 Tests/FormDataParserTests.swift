@@ -9,11 +9,11 @@ import Testing
 
 @testable import RFC_2388
 
-@Suite("FormData Parser Tests")
-struct FormDataParserTests {
+@Suite
+struct `FormData Parser Tests` {
 
-    @Test("Parse simple key-value pairs")
-    func testSimpleValues() {
+    @Test
+    func `Parse simple key-value pairs`() {
         let result = FormData.parse("name=John&age=30")
 
         guard case .dictionary(let dict) = result else {
@@ -25,8 +25,8 @@ struct FormDataParserTests {
         #expect(dict["age"]?.stringValue == "30")
     }
 
-    @Test("Parse arrays with brackets strategy")
-    func testBracketsStrategy() {
+    @Test
+    func `Parse arrays with brackets strategy`() {
         let result = FormData.parse("tags[]=swift&tags[]=vapor", strategy: .brackets)
 
         guard case .dictionary(let dict) = result,
@@ -41,8 +41,8 @@ struct FormDataParserTests {
         #expect(tags[1].stringValue == "vapor")
     }
 
-    @Test("Parse arrays with indices")
-    func testBracketsWithIndicesStrategy() {
+    @Test
+    func `Parse arrays with indices`() {
         let result = FormData.parse(
             "items[0]=first&items[1]=second",
             strategy: .bracketsWithIndices
@@ -60,8 +60,8 @@ struct FormDataParserTests {
         #expect(items[1].stringValue == "second")
     }
 
-    @Test("Parse with accumulate values strategy")
-    func testAccumulateValuesStrategy() {
+    @Test
+    func `Parse with accumulate values strategy`() {
         let result = FormData.parse("color=red&color=blue", strategy: .accumulateValues)
 
         guard case .dictionary(let dict) = result,
@@ -76,8 +76,8 @@ struct FormDataParserTests {
         #expect(colors[1].stringValue == "blue")
     }
 
-    @Test("Parse nested objects")
-    func testNestedObjects() {
+    @Test
+    func `Parse nested objects`() {
         let result = FormData.parse("user[name]=John&user[email]=john@example.com")
 
         guard case .dictionary(let dict) = result,
@@ -91,8 +91,8 @@ struct FormDataParserTests {
         #expect(user["email"]?.stringValue == "john@example.com")
     }
 
-    @Test("Extract pairs from query string")
-    func testExtractPairs() {
+    @Test
+    func `Extract pairs from query string`() {
         let pairs = FormData.extractPairs(from: "name=John&age=30")
 
         #expect(pairs.count == 2)
@@ -102,8 +102,8 @@ struct FormDataParserTests {
         #expect(pairs[1].1 == "30")
     }
 
-    @Test("Handle percent-encoded values")
-    func testPercentEncoding() {
+    @Test
+    func `Handle percent-encoded values`() {
         let result = FormData.parse("name=John+Doe&message=Hello%20World")
 
         guard case .dictionary(let dict) = result else {
