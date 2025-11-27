@@ -5,7 +5,7 @@
 //  RFC 2388: Returning Values from Forms: multipart/form-data
 //
 
-import WHATWG_URL_Encoding
+import WHATWG_Form_URL_Encoded
 
 extension FormData {
     /// Parses a URL-encoded query string into structured form data.
@@ -130,7 +130,7 @@ extension FormData {
                     pairString
                     .split(separator: "=", maxSplits: 1, omittingEmptySubsequences: false)
                     .compactMap { substring in
-                        WHATWG_URL_Encoding.percentDecode(String(substring), plusAsSpace: true)
+                        WHATWG_Form_URL_Encoded.percentDecode(String(substring), plusAsSpace: true)
                     }
                 return (pairArray[0], pairArray.count == 2 ? pairArray[1] : nil)
             }

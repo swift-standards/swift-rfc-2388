@@ -17,18 +17,35 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/swift-standards/swift-whatwg-url-encoding.git", from: "0.1.0")
+        .package(url: "https://github.com/swift-standards/swift-ieee-754", from: "0.1.0"),
+        .package(url: "https://github.com/swift-standards/swift-whatwg-url", from: "0.1.0")
     ],
     targets: [
         .target(
             name: "RFC 2388",
             dependencies: [
-                .product(name: "WHATWG URL Encoding", package: "swift-whatwg-url-encoding")
+                .product(name: "IEEE 754", package: "swift-ieee-754"),
+                .product(name: "WHATWG Form URL Encoded", package: "swift-whatwg-url")
             ]
         ),
         .testTarget(
-            name: "RFC 2388 Tests",
+            name: "RFC 2388".tests,
             dependencies: ["RFC 2388"]
         ),
-    ]
+    ],
+    swiftLanguageModes: [.v6]
 )
+
+extension String {
+    var tests: Self { self + " Tests" }
+    var foundation: Self { self + " Foundation" }
+}
+
+for target in package.targets where ![.system, .binary, .plugin].contains(target.type) {
+    let existing = target.swiftSettings ?? []
+    target.swiftSettings = existing + [
+        .enableUpcomingFeature("ExistentialAny"),
+        .enableUpcomingFeature("InternalImportsByDefault"),
+        .enableUpcomingFeature("MemberImportVisibility")
+    ]
+}

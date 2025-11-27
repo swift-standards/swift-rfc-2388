@@ -5,7 +5,7 @@
 //  RFC 2388: Returning Values from Forms: multipart/form-data
 //
 
-import WHATWG_URL_Encoding
+import WHATWG_Form_URL_Encoded
 
 extension FormData {
     /// Strategies for encoding arrays in form data.
@@ -55,7 +55,7 @@ extension FormData {
         let raw = encodeWithStrategy(prefix: "", strategy: strategy)
 
         if percentEncode {
-            return WHATWG_URL_Encoding.percentEncode(raw, spaceAsPlus: true)
+            return WHATWG_Form_URL_Encoded.percentEncode(raw, spaceAsPlus: true)
         } else {
             return raw
         }
