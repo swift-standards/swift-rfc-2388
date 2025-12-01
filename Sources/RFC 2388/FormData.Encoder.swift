@@ -55,7 +55,7 @@ extension FormData {
         let raw = encodeWithStrategy(prefix: "", strategy: strategy)
 
         if percentEncode {
-            return WHATWG_Form_URL_Encoded.percentEncode(raw, spaceAsPlus: true)
+            return WHATWG_Form_URL_Encoded.PercentEncoding.encode(raw, spaceAsPlus: true)
         } else {
             return raw
         }
