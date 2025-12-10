@@ -17,8 +17,8 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/swift-standards/swift-ieee-754", from: "0.1.0"),
-        .package(url: "https://github.com/swift-standards/swift-whatwg-url", from: "0.1.0")
+        .package(url: "https://github.com/swift-standards/swift-ieee-754", from: "0.3.3"),
+        .package(url: "https://github.com/swift-standards/swift-whatwg-url", from: "0.2.2")
     ],
     targets: [
         .target(
