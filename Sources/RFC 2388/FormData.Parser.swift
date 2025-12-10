@@ -130,7 +130,10 @@ extension FormData {
                     pairString
                     .split(separator: "=", maxSplits: 1, omittingEmptySubsequences: false)
                     .compactMap { substring in
-                        try? WHATWG_Form_URL_Encoded.PercentEncoding.decode(String(substring), plusAsSpace: true)
+                        try? WHATWG_Form_URL_Encoded.PercentEncoding.decode(
+                            String(substring),
+                            plusAsSpace: true
+                        )
                     }
                 return (pairArray[0], pairArray.count == 2 ? pairArray[1] : nil)
             }
